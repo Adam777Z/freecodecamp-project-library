@@ -6,18 +6,17 @@
 
 #sampleui {
   max-width: 450px;
-  margin-left: 5%;
-  height: 100%;
+  margin: 2%;
 }
 
 #sampleposting {
   max-width: 450px;
   text-align: center;
-  margin-left: 5%;
+  margin: 2%;
 }
 
 #userstories {
-  margin-left: 5%;
+  margin: 2%;
 }
 
 form {
