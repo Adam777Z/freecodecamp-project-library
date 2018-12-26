@@ -1,4 +1,4 @@
-.border {
+/* .border {
   border-style: inset;
   border-width: 1px;
   margin: 10px;
@@ -21,4 +21,8 @@
 
 form {
   padding: 5px;
+} */
+
+.jumbotron {
+	margin-top: 2rem;
 }
