@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Personal Library</title>
+	<meta name="description" content="freeCodeCamp - Information Security and Quality Assurance Project: Personal Library">
+	<link rel="shortcut icon" href="https://cdn.glitch.com/us-east-1%3A52a203ff-088b-420f-81be-45bf559d01b1%2Ffavicon.ico" type="image/x-icon">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<link rel="stylesheet" href="/public/style.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+	<script src="/public/client.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="jumbotron p-4">
+					<div class="container">
+						<header>
+							<h1 id="title" class="text-center">Personal Library</h1>
+						</header>
+
+						<div id="userstories">
+							<h2>User Stories:</h2>
+							<ol>
+								<li>Nothing from my website will be cached in my client as a security measure.</li>
+								<li>I will see that the site is powered by 'PHP 4.2.0' even though it isn't as a security measure.</li>
+								<li>I can <b>POST</b> a <code>title</code> to /api/books to add a book and returned will be the object with the <code>title</code> and a unique <code>_id</code>.</li>
+								<li>I can <b>GET</b> /api/books to retrieve an aray of all books containing <code>title</code>, <code>_id</code>, & <code>commentcount</code>.</li>
+								<li>I can <b>GET</b> /api/books/{_id} to retrieve a single object of a book containing <code>title</code>, <code>_id</code>, & an array of <code>comments</code> (empty array if no comments present).</li>
+								<li>I can <b>POST</b> a <code>comment</code> to /api/books/{_id} to add a comment to a book and returned will be the books object similar to <b>GET</b> /api/books/{_id}.</li>
+								<li>I can <b>DELETE</b> /api/books/{_id} to delete a book from the collection. Returned will be 'delete successful' if successful.</li>
+								<li>If I try to request a book that doesn't exist I will get a 'no book exists' message.</li>
+								<li>I can send a <b>DELETE</b> request to /api/books to delete all books in the database. Returned will be 'complete delete successful' if successful.</li>
+								<li>All 6 functional tests required are complete and passing.</li>
+							</ol>
+							<br>
+							<img src="https://cdn.glitch.com/b53058f6-c161-48fc-80fd-3b6450965b36%2FScreen_Shot_2016-12-16_at_1.35.56_AM_2.png" />
+						</div>
+
+						<hr>
+
+						<div id="sampleposting" class="text-center">
+							<h2>Test API responses:</h2>
+							<div class="row">
+								<div class="col">
+									<h4>Test post to /api/books</h4>
+									<form action="/api/books" method="post">
+										<div class="form-group mb-0">
+											<label for="bookTitle">Book Title:</label>
+											<input id="bookTitle" class="form-control mb-2" type="text" name="title" placeholder="Book Title" value="">
+										</div>
+										<input class="btn btn-primary" type="submit" value="Submit">
+									</form>
+								</div>
+								<div class="col">
+									<h4>Test post to /api/books/{bookid}</h4>
+									<form id="commentTest" action="" method="post">
+										<div class="form-group mb-0">
+											<label for="idinputtest">Book ID to comment on:</label>
+											<input id="idinputtest" class="form-control mb-2" type="text" name="id" placeholder="Book ID to comment on" value="">
+											<label for="bookComment">Comment:</label>
+											<input id="bookComment" class="form-control mb-2" type="text" name="comment" placeholder="Comment" value="">
+										</div>
+										<input class="btn btn-primary" type="submit" value="Submit">
+									</form>
+								</div>
+							</div>
+						</div>
+
+						<hr>
+
+						<div id="sampleui">
+							<h2>Sample Front-End:</h2>
+							<div class="row">
+								<div class="col text-center">
+									<form id="newBookForm">
+										<input id="bookTitleToAdd" class="form-control mb-2" type="text" name="title" placeholder="New Book Title">
+										<button id="newBook" class="btn btn-primary" type="submit" value="Submit">Submit New Book!</button>
+									</form>
+									<div class="text-left mt-2">
+										<button class="btn btn-danger" id="deleteAllBooks">Delete all books...</button>
+									</div>
+								</div>
+								<div class="col">
+									<h4>Books:</h4>
+									<div id="display"></div>
+									<div id="bookDetail">
+										<p id="detailTitle">Select a book to see its details and comments</p>
+										<ol id="detailComments"></ol>
+										<div id="detailForm"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<hr>
+
+						<div class="footer text-center">
+							<p>by <a href="https://www.freecodecamp.org" target="_blank">freeCodeCamp</a> (ISQA1) & <a href="https://www.freecodecamp.org/adam111" target="_blank">Adam</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// For #sampleposting to update form action URL to test input Book ID
+		$(function() {
+			$('#commentTest').submit(function() {
+				var id = $('#idinputtest').val();
+				$(this).attr('action', '/api/books/' + id);
+			});
+		});
+	</script>
+</body>
+</html>
