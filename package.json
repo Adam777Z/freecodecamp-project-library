@@ -1,5 +1,5 @@
 {
-	"name": "Personal Library",
+	"name": "freecodecamp-project-library",
 	"version": "1.0.0",
 	"description": "freeCodeCamp - Information Security and Quality Assurance Project: Personal Library",
 	"author": "Adam",
@@ -24,7 +24,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Adam111/freecodecamp-project-library"
+		"url": "https://github.com/Adam111/freecodecamp-project-library.git"
 	},
 	"keywords": [
 		"glitch",
