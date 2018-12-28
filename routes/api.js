@@ -39,6 +39,10 @@ module.exports = function (app) {
       var title = req.body.title;
       //response will contain new book object including at least _id and title
       
+      if (title === undefined || title === '') {
+        return res.json({ error: 'Book Title is required' });
+      }
+      
       MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
@@ -80,6 +84,10 @@ module.exports = function (app) {
       var bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
       
+      if (bookid === undefined || bookid === '') {
+        return res.json({ error: 'Book ID is required' });
+      }
+      
       if (!ObjectId.isValid(bookid)) {
         return res.json({ error: 'valid id is required' });
       }
@@ -103,6 +111,14 @@ module.exports = function (app) {
       var bookid = req.params.id;
       var comment = req.body.comment;
       //json res format same as .get
+      
+      if (bookid === undefined || bookid === '') {
+        return res.json({ error: 'Book ID is required' });
+      }
+      
+      if (comment === undefined || comment === '') {
+        return res.json({ error: 'Comment is required' });
+      }
       
       MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true }, function(err, db) {
         if (err) {
@@ -129,7 +145,7 @@ module.exports = function (app) {
       var bookid = req.params.id;
       //if successful response will be 'delete successful'
       
-      if (bookid === undefined) {
+      if (bookid === undefined || bookid === '') {
         return res.json({ error: 'id is required' });
       }
       

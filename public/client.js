@@ -52,11 +52,15 @@ $(document).ready(function() {
 			dataType: 'json',
 			data: $('#newCommentForm').serialize(),
 			success: function(data) {
-				// comments.unshift('<li>' + newComment + '</li>'); // add new comment to top of list
-				comments.push('<li>' + newComment + '</li>');
-				$('#detailComments').html(comments.join(''));
-				itemsRaw[this_id]['commentcount']++;
-				$('#' + this_id).html(itemsRaw[this_id]['title'] + ' - ' + itemsRaw[this_id]['commentcount'] + ' comments');
+				if (data.error) {
+					alert(data.error);
+				} else {
+					// comments.unshift('<li>' + newComment + '</li>'); // add new comment to top of list
+					comments.push('<li>' + newComment + '</li>');
+					$('#detailComments').html(comments.join(''));
+					itemsRaw[this_id]['commentcount']++;
+					$('#' + this_id).html(itemsRaw[this_id]['title'] + ' - ' + itemsRaw[this_id]['commentcount'] + ' comments');
+				}
 			}
 		});
 	});
@@ -88,11 +92,15 @@ $(document).ready(function() {
 			dataType: 'json',
 			data: $('#newBookForm').serialize(),
 			success: function(data) {
-				// update list
-				data.commentcount = 0;
-				itemsRaw.push(data);
-				$('#display').html('');
-				loadBooks();
+				if (data.error) {
+					alert(data.error);
+				} else {
+					// update list
+					data.commentcount = 0;
+					itemsRaw.push(data);
+					$('#display').html('');
+					loadBooks();
+				}
 			}
 		});
 	});
