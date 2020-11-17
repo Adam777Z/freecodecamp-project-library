@@ -19,7 +19,7 @@ module.exports = function (app) {
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
       
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true }, function(err, db) {
+      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -43,7 +43,7 @@ module.exports = function (app) {
         return res.json({ error: 'Book Title is required' });
       }
       
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true }, function(err, db) {
+      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -62,7 +62,7 @@ module.exports = function (app) {
     })
     .delete(function(req, res) {
       //if successful response will be 'complete delete successful'
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true }, function(err, db) {
+      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -92,7 +92,7 @@ module.exports = function (app) {
         return res.json({ error: 'valid id is required' });
       }
       
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true }, function(err, db) {
+      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -120,7 +120,7 @@ module.exports = function (app) {
         return res.json({ error: 'Comment is required' });
       }
       
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true }, function(err, db) {
+      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -149,7 +149,7 @@ module.exports = function (app) {
         return res.json({ error: 'id is required' });
       }
       
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true }, function(err, db) {
+      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
