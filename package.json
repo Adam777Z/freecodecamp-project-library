@@ -3,10 +3,17 @@
   "description": "freeCodeCamp - Information Security and Quality Assurance Project: Personal Library",
   "version": "1.0.0",
   "author": "Adam",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
+  "keywords": [
+    "glitch",
+    "node",
+    "express",
+    "freecodecamp"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Adam777Z/freecodecamp-project-library.git"
   },
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
     "cors": "^2.8.5",
@@ -18,18 +25,11 @@
     "zombie": "^4.3.0",
     "helmet": "^3.15.0"
   },
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "engines": {
     "node": "10.14.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Adam777Z/freecodecamp-project-library.git"
-  },
-  "keywords": [
-    "glitch",
-    "node",
-    "express",
-    "freecodecamp"
-  ],
-  "license": "MIT"
+  }
 }
