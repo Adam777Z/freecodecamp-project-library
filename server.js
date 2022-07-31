@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(helmet({
+  contentSecurityPolicy: false,
   noCache: true,
   hidePoweredBy: {
     setTo: 'PHP 4.2.0'
