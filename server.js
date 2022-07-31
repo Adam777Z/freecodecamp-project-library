@@ -1,9 +1,10 @@
 'use strict';
 
-var express     = require('express');
-var bodyParser  = require('body-parser');
-var cors        = require('cors');
-const helmet    = require('helmet');
+var express           = require('express');
+var bodyParser        = require('body-parser');
+var cors              = require('cors');
+const helmet          = require('helmet');
+var responsePoweredBy = require('response-powered-by');
 
 var apiRoutes         = require('./routes/api.js');
 var fccTestingRoutes  = require('./routes/fcctesting.js');
@@ -18,12 +19,12 @@ app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.disable('x-powered-by')
-
 app.use(helmet({
   contentSecurityPolicy: false,
   noCache: true
 }));
+
+app.use(responsePoweredBy('PHP 4.2.0'));
 
 //Index page (static HTML)
 app.route('/')
