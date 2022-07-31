@@ -18,10 +18,11 @@ app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.disable('x-powered-by')
+
 app.use(helmet({
   contentSecurityPolicy: false,
-  noCache: true,
-  hidePoweredBy: true
+  noCache: true
 }));
 
 //Index page (static HTML)
