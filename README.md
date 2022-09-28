@@ -3,8 +3,8 @@
 
 **Personal Library**
 
-1) Add your MongoDB connection string to .env without quotes as DATABASE
-    `example: DATABASE=mongodb://admin:pass@1234.mlab.com:1234/fccpersonallib`
+1) Add your MongoDB connection string to .env without quotes as MONGO_URI
+    `example: MONGO_URI=mongodb://admin:pass@1234.mlab.com:1234/fccpersonallib`
 2) SET NODE_ENV to `test` without quotes
 3) You need to create all routes within `routes/api.js`
 4) You will add any security features to `server.js`

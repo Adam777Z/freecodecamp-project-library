@@ -2,8 +2,8 @@
 *
 *
 *       Complete the API routing below
-*       
-*       
+*
+*
 */
 
 'use strict';
@@ -18,8 +18,8 @@ module.exports = function (app) {
     .get(function (req, res) {
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
-      
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
+
+      MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -29,7 +29,7 @@ module.exports = function (app) {
               docs[i]['commentcount'] = docs[i]['comments'].length;
               delete docs[i]['comments'];
             }
-            
+
             return res.json(docs);
           });
         }
@@ -38,12 +38,12 @@ module.exports = function (app) {
     .post(function (req, res) {
       var title = req.body.title;
       //response will contain new book object including at least _id and title
-      
+
       if (title === undefined || title === '') {
         return res.json({ error: 'Book Title is required' });
       }
-      
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
+
+      MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -62,7 +62,7 @@ module.exports = function (app) {
     })
     .delete(function(req, res) {
       //if successful response will be 'complete delete successful'
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
+      MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -83,16 +83,16 @@ module.exports = function (app) {
     .get(function (req, res) {
       var bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
-      
+
       if (bookid === undefined || bookid === '') {
         return res.json({ error: 'Book ID is required' });
       }
-      
+
       if (!ObjectId.isValid(bookid)) {
         return res.json({ error: 'valid id is required' });
       }
-      
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
+
+      MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -111,16 +111,16 @@ module.exports = function (app) {
       var bookid = req.params.id;
       var comment = req.body.comment;
       //json res format same as .get
-      
+
       if (bookid === undefined || bookid === '') {
         return res.json({ error: 'Book ID is required' });
       }
-      
+
       if (comment === undefined || comment === '') {
         return res.json({ error: 'Comment is required' });
       }
-      
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
+
+      MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -144,12 +144,12 @@ module.exports = function (app) {
     .delete(function(req, res) {
       var bookid = req.params.id;
       //if successful response will be 'delete successful'
-      
+
       if (bookid === undefined || bookid === '') {
         return res.json({ error: 'id is required' });
       }
-      
-      MongoClient.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
+
+      MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
@@ -169,5 +169,5 @@ module.exports = function (app) {
         }
       });
     });
-  
+
 };
