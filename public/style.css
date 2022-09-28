@@ -1,27 +1,36 @@
 /* .border {
-  border-style: inset;
-  border-width: 1px;
-  margin: 10px;
+	border-style: inset;
+	border-width: 1px;
+	margin: 10px;
 }
 
 #sampleui {
-  max-width: 450px;
-  margin: 2%;
+	max-width: 450px;
+	margin: 2%;
 }
 
 #sampleposting {
-  max-width: 450px;
-  text-align: center;
-  margin: 2%;
+	max-width: 450px;
+	text-align: center;
+	margin: 2%;
 }
 
 #userstories {
-  margin: 2%;
+	margin: 2%;
 }
 
 form {
-  padding: 5px;
+	padding: 5px;
 } */
+
+.bookItem {
+	cursor: pointer;
+	width: fit-content;
+}
+
+.bookItem:hover {
+	text-decoration: underline;
+}
 
 .jumbotron {
 	margin-top: 2rem;
