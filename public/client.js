@@ -49,11 +49,17 @@ $(document).ready(function() {
 		$.ajax({
 			url: '/api/books/' + this.id,
 			type: 'post',
-			dataType: 'json',
 			data: $('#newCommentForm').serialize(),
 			success: function(data) {
-				if (data.error) {
-					alert(data.error);
+				if (data.comments === undefined) {
+					// update list if no book exists
+					$('#detailTitle').html('');
+					$('#detailComments').html('<p style="color: red;">' + data + '<p><p><a href="/">Refresh the page</a></p>');
+					$('#detailForm').html('');
+					itemsRaw.splice(this_id, 1);
+					// $('#'+this_id).remove();
+					$('#display').html('');
+					loadBooks();
 				} else {
 					// comments.unshift('<li>' + newComment + '</li>'); // add new comment to top of list
 					comments.push('<li>' + newComment + '</li>');
@@ -89,11 +95,11 @@ $(document).ready(function() {
 		$.ajax({
 			url: '/api/books',
 			type: 'post',
-			dataType: 'json',
+			// dataType: 'json',
 			data: $('#newBookForm').serialize(),
 			success: function(data) {
-				if (data.error) {
-					alert(data.error);
+				if (data.title === undefined) {
+					alert(data);
 				} else {
 					// update list
 					data.commentcount = 0;
@@ -110,7 +116,6 @@ $(document).ready(function() {
 		$.ajax({
 			url: '/api/books',
 			type: 'delete',
-			dataType: 'json',
 			data: $('#newBookForm').serialize(),
 			success: function(data) {
 				// update list
@@ -120,6 +125,7 @@ $(document).ready(function() {
 				$('#detailTitle').html('Select a book to see its details and comments');
 				$('#detailComments').html('');
 				$('#detailForm').html('');
+				alert(data);
 			}
 		});
 	});

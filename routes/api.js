@@ -17,7 +17,7 @@ module.exports = function (app) {
   app.route('/api/books')
     .get(function (req, res) {
       //response will be array of book objects
-      //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
+      //json res format: [{"_id": bookid, "title": book_title, "commentcount": number_of_comments },...]
 
       MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
         if (err) {
@@ -40,7 +40,7 @@ module.exports = function (app) {
       //response will contain new book object including at least _id and title
 
       if (title === undefined || title === '') {
-        return res.json({ error: 'Book Title is required' });
+        return res.send('missing required field title');
       }
 
       MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
@@ -48,13 +48,16 @@ module.exports = function (app) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
         } else {
+          let obj = {
+            title: title,
+            comments: []
+          };
+
           db.db().collection('books').insertOne(
-            {
-              title: title,
-              comments: []
-            }, function(err, doc) {
-              delete doc['ops'][0]['comments'];
-              return res.json(doc['ops'][0]);
+            obj,
+            function(err, doc) {
+              delete obj['comments'];
+              return res.json(obj);
             }
           );
         }
@@ -67,11 +70,13 @@ module.exports = function (app) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
         } else {
-          db.db().collection('books').deleteMany({}, function(error, result) {
-              if (result.result.ok === 1 && result.result.n > 0) {
-                return res.json('complete delete successful');
+          db.db().collection('books').deleteMany(
+            {},
+            function(error, result) {
+              if (result.acknowledged && result.deletedCount > 0) {
+                return res.send('complete delete successful');
               } else {
-                return res.json('complete delete unsuccessful');
+                return res.send('complete delete unsuccessful');
               }
             }
           );
@@ -85,11 +90,11 @@ module.exports = function (app) {
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
 
       if (bookid === undefined || bookid === '') {
-        return res.json({ error: 'Book ID is required' });
+        return res.send('missing required field bookid');
       }
 
       if (!ObjectId.isValid(bookid)) {
-        return res.json({ error: 'valid id is required' });
+        return res.send('invalid bookid');
       }
 
       MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
@@ -97,13 +102,18 @@ module.exports = function (app) {
           // console.log('Database error: ' + err);
           return res.json({ error: 'error' });
         } else {
-          db.db().collection('books').findOne({ _id: new ObjectId(bookid) }, function(error, result) {
-            if (result === null) {
-              return res.json('no book exists');
-            } else {
-              return res.json(result);
+          db.db().collection('books').findOne(
+            {
+              _id: new ObjectId(bookid)
+            },
+            function(error, result) {
+              if (result === null) {
+                return res.send('no book exists');
+              } else {
+                return res.json(result);
+              }
             }
-          });
+          );
         }
       });
     })
@@ -113,11 +123,11 @@ module.exports = function (app) {
       //json res format same as .get
 
       if (bookid === undefined || bookid === '') {
-        return res.json({ error: 'Book ID is required' });
+        return res.send('missing required field bookid');
       }
 
       if (comment === undefined || comment === '') {
-        return res.json({ error: 'Comment is required' });
+        return res.send('missing required field comment');
       }
 
       MongoClient.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, db) {
@@ -129,13 +139,18 @@ module.exports = function (app) {
             {
               _id: new ObjectId(bookid)
             },
-            { $push: {
+            {
+              $push: {
                 comments: comment
               }
             },
-            { returnOriginal: false }, // Return updated object after modify
+            { returnDocument: 'after' }, // Return the updated document
             function(error, result) {
-              return res.json(result.value);
+              if (result.value === null) {
+                return res.send('no book exists');
+              } else {
+                return res.json(result.value);
+              }
             }
           );
         }
@@ -159,10 +174,14 @@ module.exports = function (app) {
               _id: new ObjectId(bookid)
             },
             function(error, result) {
-              if (result.ok === 1 && result.value !== null) {
-                return res.json('delete successful');
+              if (result.value === null) {
+                return res.send('no book exists');
               } else {
-                return res.json('delete unsuccessful');
+                if (result.ok === 1) {
+                  return res.send('delete successful');
+                } else {
+                  return res.send('delete unsuccessful');
+                }
               }
             }
           );
