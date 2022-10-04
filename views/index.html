@@ -36,9 +36,30 @@
 								<li>I can send a <b>DELETE</b> request to /api/books to delete all books in the database. Returned will be 'complete delete successful' if successful.</li>
 								<li>All 6 functional tests required are complete and passing.</li>
 							</ol>
-							<p>
-								<img src="/public/api-table-screenshot.png">
-							</p>
+							<table class="table text-center">
+								<thead>
+									<tr>
+										<th scope="col">API</th>
+										<th scope="col">GET</th>
+										<th scope="col">POST</th>
+										<th scope="col">DELETE</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">/api/books</th>
+										<td>list all books</td>
+										<td>add new book</td>
+										<td>delete all books</td>
+									</tr>
+									<tr>
+										<th scope="row">/api/books/1234</th>
+										<td>show book 1234</td>
+										<td>add comment to 1234</td>
+										<td>delete 1234</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 
 						<hr>
