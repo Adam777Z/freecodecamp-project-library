@@ -42,6 +42,12 @@ form {
 	border: 1px solid #343a40 !important;
 }
 
+.table th,
+.table td {
+	text-align: center;
+	vertical-align: middle;
+}
+
 .table thead th,
 .table thead td {
 	border-bottom-width: 1px;
