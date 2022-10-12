@@ -35,7 +35,7 @@ $(document).ready(function() {
 
 			let after_comments = [];
 			after_comments.push('<form id="newCommentForm"><input type="text" class="form-control mb-2" id="commentToAdd" name="comment" placeholder="New Comment">');
-			after_comments.push('<button class="btn btn-info mb-2 addComment" id="' + data._id + '" data-i="' + this_id + '">Add Comment</button><br>');
+			after_comments.push('<button class="btn btn-primary mb-2 addComment" id="' + data._id + '" data-i="' + this_id + '">Add Comment</button><br>');
 			after_comments.push('<button class="btn btn-danger deleteBook" id="' + data._id + '" data-i="' + this_id + '">Delete Book</button></form>');
 			$('#detailComments').html(comments.join(''));
 			$('#detailForm').html(after_comments.join(''));
