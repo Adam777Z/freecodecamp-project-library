@@ -112,13 +112,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
 				if (data['error'] !== undefined) {
 					alert(data['error']);
 				} else if (data['comments'] === undefined) {
-					// update list if no book exists
-					document.querySelector('#detailTitle').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh page</a></p>';
-					document.querySelector('#bookForm').innerHTML = '';
-					books.splice(this_id, 1);
-					// document.querySelector('#'+this_id).remove();
-					// document.querySelector('#books').innerHTML = '';
-					loadBooks();
+					// update list
+					document.querySelector('#detailTitle').innerHTML = '<p style="color: red;">' + data + '</p>';
+
+					if (data == 'no book exists') {
+						document.querySelector('#bookComments').innerHTML = '';
+						document.querySelector('#bookForm').innerHTML = '';
+						document.querySelector('#book-' + this_id).remove();
+						books.splice(this_id, 1);
+					}
 				} else {
 					document.querySelector('#commentToAdd').value = '';
 					comments_html += `<li>${newComment}</li>`; // add new comment to bottom of list
@@ -160,12 +162,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 						alert(data['error']);
 					} else {
 						// update list
-						document.querySelector('#detailTitle').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh page</a></p>';
+						document.querySelector('#detailTitle').innerHTML = '<p style="color: red;">' + data + '</p>';
+						document.querySelector('#bookComments').innerHTML = '';
 						document.querySelector('#bookForm').innerHTML = '';
+						document.querySelector('#book-' + this_id).remove();
 						books.splice(this_id, 1);
-						// document.querySelector('#'+this_id).remove();
-						// document.querySelector('#books').innerHTML = '';
-						loadBooks();
 					}
 				})
 				.catch((error) => {
@@ -204,7 +205,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 				// update list
 				data['commentcount'] = 0;
 				books.push(data);
-				// document.querySelector('#books').innerHTML = '';
 				loadBooks();
 			}
 		})
