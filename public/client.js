@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-	var items = [];
-	var itemsRaw = [];
-	var comments = [];
+	var books = [];
+	var books_html = '';
+	var comments_html = '';
 
 	fetch('/api/books', {
 		'method': 'GET'
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		}
 	})
 	.then((data) => {
-		itemsRaw = data;
+		books = data;
 		loadBooks();
 	})
 	.catch((error) => {
@@ -22,30 +22,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	});
 
 	function loadBooks() {
-		if (itemsRaw.length) {
-			items = [];
+		if (books.length) {
+			books_html = '';
 
-			items.push('<ul class="listWrapper">');
-
-			for (let [i, val] of Object.entries(itemsRaw)) {
-				// i = parseInt(i);
-
-				// Show at most 15
-				// if (i+1 > 15) {
-				// 	break;
-				// }
-
-				items.push('<li class="bookItem" id="book-' + i + '">' + val['title'] + ' - ' + val['commentcount'] + ' comments</li>');
+			for (let [i, val] of Object.entries(books)) {
+				books_html += `<li class="bookItem" id="book-${i}">${val['title']} - ${val['commentcount']} comments</li>`;
 			}
 
-			// Show at most 15
-			// if (itemsRaw.length > 15) {
-			// 	items.push('<p>...and ' + (itemsRaw.length - 15) + ' more</p>');
-			// }
-
-			items.push('</ul>');
-
-			document.querySelector('#display').innerHTML = items.join('');
+			document.querySelector('#books').innerHTML = books_html;
 		}
 	}
 
@@ -55,12 +39,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		event2.target.setAttribute('action', '/api/books/' + id);
 	});
 
-	document.querySelector('#display').addEventListener('click', (event2) => {
+	document.querySelector('#books').addEventListener('click', (event2) => {
 		if (event2.target.classList.contains('bookItem')) {
 			let this_id = event2.target.id.replace('book-', '');
-			document.querySelector('#detailTitle').innerHTML = '<b>' + itemsRaw[this_id]['title'] + '</b> (id: ' + itemsRaw[this_id]['_id'] + ')';
+			document.querySelector('#detailTitle').innerHTML = '<b>' + books[this_id]['title'] + '</b> (id: ' + books[this_id]['_id'] + ')';
 
-			fetch('/api/books/' + itemsRaw[this_id]['_id'], {
+			fetch('/api/books/' + books[this_id]['_id'], {
 				'method': 'GET'
 			})
 			.then((response) => {
@@ -77,20 +61,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					// console.log(error);
 				}
 
-				comments = [];
+				comments_html = '';
 
 				for (let [i, val] of Object.entries(data['comments'])) {
-					comments.push('<li>' + val + '</li>');
+					comments_html += `<li>${val}</li>`;
 				}
 
-				let after_comments = [];
+				let new_comment_form_html = `
+				<form id="newCommentForm">
+					<input type="text" class="form-control mb-2" id="commentToAdd" name="comment" placeholder="New Comment">
+					<button type="button" class="btn btn-primary mb-2 addComment" id="${data['_id']}" data-i="${this_id}">Add Comment</button><br>
+					<button type="button" class="btn btn-danger deleteBook" id="${data['_id']}" data-i="${this_id}">Delete Book</button>
+				</form>
+				`;
 
-				after_comments.push('<form id="newCommentForm"><input type="text" class="form-control mb-2" id="commentToAdd" name="comment" placeholder="New Comment">');
-				after_comments.push('<button class="btn btn-primary mb-2 addComment" id="' + data['_id'] + '" data-i="' + this_id + '">Add Comment</button><br>');
-				after_comments.push('<button class="btn btn-danger deleteBook" id="' + data['_id'] + '" data-i="' + this_id + '">Delete Book</button></form>');
-
-				document.querySelector('#detailComments').innerHTML = comments.join('');
-				document.querySelector('#detailForm').innerHTML = after_comments.join('');
+				document.querySelector('#bookComments').innerHTML = comments_html;
+				document.querySelector('#bookForm').innerHTML = new_comment_form_html;
 			})
 			.catch((error) => {
 				console.log(error);
@@ -123,24 +109,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					// console.log(error);
 				}
 
-				if (data['comments'] === undefined) {
+				if (data['error'] !== undefined) {
+					alert(data['error']);
+				} else if (data['comments'] === undefined) {
 					// update list if no book exists
-					document.querySelector('#detailTitle').innerHTML = '';
-					document.querySelector('#detailComments').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh page</a></p>';
-					document.querySelector('#detailForm').innerHTML = '';
-					itemsRaw.splice(this_id, 1);
+					document.querySelector('#detailTitle').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh page</a></p>';
+					document.querySelector('#bookForm').innerHTML = '';
+					books.splice(this_id, 1);
 					// document.querySelector('#'+this_id).remove();
-					// document.querySelector('#display').innerHTML = '';
+					// document.querySelector('#books').innerHTML = '';
 					loadBooks();
 				} else {
-					// comments.unshift('<li>' + newComment + '</li>'); // add new comment to top of list
-					comments.push('<li>' + newComment + '</li>');
-					document.querySelector('#detailComments').innerHTML = comments.join('');
-					itemsRaw[this_id]['commentcount']++;
-					document.querySelector('#book-' + this_id).innerHTML = itemsRaw[this_id]['title'] + ' - ' + itemsRaw[this_id]['commentcount'] + ' comments';
+					document.querySelector('#commentToAdd').value = '';
+					comments_html += `<li>${newComment}</li>`; // add new comment to bottom of list
+					document.querySelector('#bookComments').innerHTML = comments_html;
+					books[this_id]['commentcount']++;
+					document.querySelector('#book-' + this_id).innerHTML = books[this_id]['title'] + ' - ' + books[this_id]['commentcount'] + ' comments';
 				}
-
-				document.querySelector('#commentToAdd').value = '';
 			})
 			.catch((error) => {
 				console.log(error);
@@ -150,38 +135,43 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		if (event2.target.classList.contains('deleteBook')) {
 			event2.preventDefault();
 
-			let this_id = event2.target.dataset['i'];
+			if (confirm('Are you sure you want to delete this book?')) {
+				let this_id = event2.target.dataset['i'];
 
-			fetch('/api/books/' + event2.target.id, {
-				'method': 'DELETE',
-				// 'body': new URLSearchParams(new FormData(document.querySelector('#newCommentForm')))
-			})
-			.then((response) => {
-				if (response['ok']) {
-					return response.text();
-				} else {
-					throw 'Error';
-				}
-			})
-			.then((data) => {
-				try {
-					data = JSON.parse(data);
-				} catch (error) {
-					// console.log(error);
-				}
+				fetch('/api/books/' + event2.target.id, {
+					'method': 'DELETE',
+					// 'body': new URLSearchParams(new FormData(document.querySelector('#newCommentForm')))
+				})
+				.then((response) => {
+					if (response['ok']) {
+						return response.text();
+					} else {
+						throw 'Error';
+					}
+				})
+				.then((data) => {
+					try {
+						data = JSON.parse(data);
+					} catch (error) {
+						// console.log(error);
+					}
 
-				// update list
-				document.querySelector('#detailTitle').innerHTML = '';
-				document.querySelector('#detailComments').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh page</a></p>';
-				document.querySelector('#detailForm').innerHTML = '';
-				itemsRaw.splice(this_id, 1);
-				// document.querySelector('#'+this_id).remove();
-				// document.querySelector('#display').innerHTML = '';
-				loadBooks();
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+					if (data['error'] !== undefined) {
+						alert(data['error']);
+					} else {
+						// update list
+						document.querySelector('#detailTitle').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh page</a></p>';
+						document.querySelector('#bookForm').innerHTML = '';
+						books.splice(this_id, 1);
+						// document.querySelector('#'+this_id).remove();
+						// document.querySelector('#books').innerHTML = '';
+						loadBooks();
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+			}
 		}
 	});
 
@@ -213,8 +203,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 				// update list
 				data['commentcount'] = 0;
-				itemsRaw.push(data);
-				// document.querySelector('#display').innerHTML = '';
+				books.push(data);
+				// document.querySelector('#books').innerHTML = '';
 				loadBooks();
 			}
 		})
@@ -244,12 +234,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 				}
 
 				// update list
-				items = [];
-				itemsRaw = [];
-				document.querySelector('#display').innerHTML = '';
+				books = [];
+				books_html = '';
+
+				document.querySelector('#books').innerHTML = '';
 				document.querySelector('#detailTitle').innerHTML = 'Select a book to see its details and comments';
-				document.querySelector('#detailComments').innerHTML = '';
-				document.querySelector('#detailForm').innerHTML = '';
+				document.querySelector('#bookComments').innerHTML = '';
+				document.querySelector('#bookForm').innerHTML = '';
+
 				alert(data);
 			})
 			.catch((error) => {
