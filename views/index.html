@@ -9,7 +9,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="/public/bootstrap.min.css">
 	<link rel="stylesheet" href="/public/style.css">
-	<script src="/public/jquery-3.3.1.min.js"></script>
 	<script src="/public/client.js"></script>
 </head>
 <body>
@@ -100,7 +99,7 @@
 									<button type="submit" id="newBook" class="btn btn-primary" value="Submit">Submit New Book</button>
 								</form>
 								<div class="mt-2 text-start">
-									<button class="btn btn-danger" id="deleteAllBooks">Delete all books...</button>
+									<button type="button" id="deleteAllBooks" class="btn btn-danger">Delete all books...</button>
 								</div>
 							</div>
 							<div class="col">
@@ -122,15 +121,5 @@
 			</div>
 		</div>
 	</div>
-
-	<script>
-		// For #sampleposting to update form action URL to test input Book ID
-		$(function() {
-			$('#commentTest').submit(function() {
-				var id = $('#idinputtest').val();
-				$(this).attr('action', '/api/books/' + id);
-			});
-		});
-	</script>
 </body>
 </html>
