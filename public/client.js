@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 				if (data['comments'] === undefined) {
 					// update list if no book exists
 					document.querySelector('#detailTitle').innerHTML = '';
-					document.querySelector('#detailComments').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh the page</a></p>';
+					document.querySelector('#detailComments').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh page</a></p>';
 					document.querySelector('#detailForm').innerHTML = '';
 					itemsRaw.splice(this_id, 1);
 					// document.querySelector('#'+this_id).remove();
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 				// update list
 				document.querySelector('#detailTitle').innerHTML = '';
-				document.querySelector('#detailComments').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh the page</a></p>';
+				document.querySelector('#detailComments').innerHTML = '<p style="color: red;">' + data + '</p><p><a href="/">Refresh page</a></p>';
 				document.querySelector('#detailForm').innerHTML = '';
 				itemsRaw.splice(this_id, 1);
 				// document.querySelector('#'+this_id).remove();
