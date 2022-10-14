@@ -39,6 +39,81 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		event2.target.setAttribute('action', '/api/books/' + id);
 	});
 
+	document.querySelector('#newBook').addEventListener('click', (event2) => {
+		event2.preventDefault();
+
+		fetch('/api/books', {
+			'method': 'POST',
+			'body': new URLSearchParams(new FormData(document.querySelector('#newBookForm')))
+		})
+		.then((response) => {
+			if (response['ok']) {
+				return response.text();
+			} else {
+				throw 'Error';
+			}
+		})
+		.then((data) => {
+			try {
+				data = JSON.parse(data);
+			} catch (error) {
+				// console.log(error);
+			}
+
+			if (data['error'] !== undefined) {
+				alert(data['error']);
+			} else if (data['_id'] === undefined) {
+				alert(data);
+			} else {
+				document.querySelector('#newBookForm').reset();
+
+				// update list
+				data['commentcount'] = 0;
+				books.push(data);
+				loadBooks();
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+	});
+
+	document.querySelector('#deleteAllBooks').addEventListener('click', (event2) => {
+		if (confirm('Are you sure you want to delete all books?')) {
+			fetch('/api/books', {
+				'method': 'DELETE'
+			})
+			.then((response) => {
+				if (response['ok']) {
+					return response.text();
+				} else {
+					throw 'Error';
+				}
+			})
+			.then((data) => {
+				try {
+					data = JSON.parse(data);
+				} catch (error) {
+					// console.log(error);
+				}
+
+				// update list
+				books = [];
+				books_html = '';
+
+				document.querySelector('#books').innerHTML = '';
+				document.querySelector('#detailTitle').innerHTML = 'Select a book to see its details and comments';
+				document.querySelector('#bookComments').innerHTML = '';
+				document.querySelector('#bookForm').innerHTML = '';
+
+				alert(data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		}
+	});
+
 	document.querySelector('#books').addEventListener('click', (event2) => {
 		if (event2.target.classList.contains('bookItem')) {
 			let this_id = event2.target.id.replace('book-', '');
@@ -112,10 +187,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 				if (data['error'] !== undefined) {
 					alert(data['error']);
 				} else if (data['comments'] === undefined) {
-					// update list
-					document.querySelector('#detailTitle').innerHTML = '<p style="color: red;">' + data + '</p>';
+					alert(data);
 
 					if (data == 'no book exists') {
+						// update list
+						document.querySelector('#detailTitle').innerHTML = 'Select a book to see its details and comments';
 						document.querySelector('#bookComments').innerHTML = '';
 						document.querySelector('#bookForm').innerHTML = '';
 						document.querySelector('#book-' + this_id).remove();
@@ -141,8 +217,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 				let this_id = event2.target.dataset['i'];
 
 				fetch('/api/books/' + event2.target.id, {
-					'method': 'DELETE',
-					// 'body': new URLSearchParams(new FormData(document.querySelector('#newCommentForm')))
+					'method': 'DELETE'
 				})
 				.then((response) => {
 					if (response['ok']) {
@@ -161,8 +236,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					if (data['error'] !== undefined) {
 						alert(data['error']);
 					} else {
+						alert(data);
+
 						// update list
-						document.querySelector('#detailTitle').innerHTML = '<p style="color: red;">' + data + '</p>';
+						document.querySelector('#detailTitle').innerHTML = 'Select a book to see its details and comments';
 						document.querySelector('#bookComments').innerHTML = '';
 						document.querySelector('#bookForm').innerHTML = '';
 						document.querySelector('#book-' + this_id).remove();
@@ -173,80 +250,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					console.log(error);
 				});
 			}
-		}
-	});
-
-	document.querySelector('#newBook').addEventListener('click', (event2) => {
-		event2.preventDefault();
-
-		fetch('/api/books', {
-			'method': 'POST',
-			'body': new URLSearchParams(new FormData(document.querySelector('#newBookForm')))
-		})
-		.then((response) => {
-			if (response['ok']) {
-				return response.text();
-			} else {
-				throw 'Error';
-			}
-		})
-		.then((data) => {
-			try {
-				data = JSON.parse(data);
-			} catch (error) {
-				// console.log(error);
-			}
-
-			if (data['error'] !== undefined) {
-				alert(data['error']);
-			} else {
-				document.querySelector('#newBookForm').reset();
-
-				// update list
-				data['commentcount'] = 0;
-				books.push(data);
-				loadBooks();
-			}
-		})
-		.catch((error) => {
-			console.log(error);
-		});
-	});
-
-	document.querySelector('#deleteAllBooks').addEventListener('click', (event2) => {
-		if (confirm('Are you sure you want to delete all books?')) {
-			fetch('/api/books', {
-				'method': 'DELETE',
-				// 'body': new URLSearchParams(new FormData(document.querySelector('#newBookForm')))
-			})
-			.then((response) => {
-				if (response['ok']) {
-					return response.text();
-				} else {
-					throw 'Error';
-				}
-			})
-			.then((data) => {
-				try {
-					data = JSON.parse(data);
-				} catch (error) {
-					// console.log(error);
-				}
-
-				// update list
-				books = [];
-				books_html = '';
-
-				document.querySelector('#books').innerHTML = '';
-				document.querySelector('#detailTitle').innerHTML = 'Select a book to see its details and comments';
-				document.querySelector('#bookComments').innerHTML = '';
-				document.querySelector('#bookForm').innerHTML = '';
-
-				alert(data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
 		}
 	});
 });
