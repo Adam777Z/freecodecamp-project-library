@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			books_html = '';
 
 			for (let [i, val] of Object.entries(books)) {
-				books_html += `<li class="bookItem" id="book-${i}">${val['title']} - ${val['commentcount']} comments</li>`;
+				books_html += `<li class="bookItem" id="book-${i}">${val['title']} - ${val['commentcount']} comment${val['commentcount'] > 1 ? 's' : ''}</li>`;
 			}
 
 			document.querySelector('#books').innerHTML = books_html;
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					comments_html += `<li>${newComment}</li>`; // add new comment to bottom of list
 					document.querySelector('#bookComments').innerHTML = comments_html;
 					books[this_id]['commentcount']++;
-					document.querySelector('#book-' + this_id).innerHTML = books[this_id]['title'] + ' - ' + books[this_id]['commentcount'] + ' comments';
+					document.querySelector('#book-' + this_id).innerHTML = books[this_id]['title'] + ' - ' + books[this_id]['commentcount'] + ' comment' + (books[this_id]['commentcount'] > 1 ? 's' : '');
 				}
 			})
 			.catch((error) => {
