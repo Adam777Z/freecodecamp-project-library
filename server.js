@@ -21,7 +21,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(helmet({
 	contentSecurityPolicy: false,
-	noCache: true
+	noCache: true,
+	frameguard: false
 }));
 
 app.use(responsePoweredBy('PHP 4.2.0'));
