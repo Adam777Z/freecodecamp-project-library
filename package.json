@@ -23,6 +23,7 @@
 		"chai-http": "^4.3.0",
 		"zombie": "^6.1.4",
 		"helmet": "^5.1.1",
+		"nocache": "^3.0.4",
 		"response-powered-by": "^1.0.4"
 	},
 	"main": "server.js",

@@ -4,6 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 const helmet = require('helmet');
+const noCache = require('nocache');
 var responsePoweredBy = require('response-powered-by');
 
 var apiRoutes = require('./routes/api.js');
@@ -21,9 +22,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(helmet({
 	contentSecurityPolicy: false,
-	noCache: true,
 	frameguard: false
 }));
+
+app.use(noCache());
 
 app.use(responsePoweredBy('PHP 4.2.0'));
 
