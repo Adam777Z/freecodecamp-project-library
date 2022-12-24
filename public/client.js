@@ -115,8 +115,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	});
 
 	document.querySelector('#books').addEventListener('click', (event2) => {
-		if (event2.target.classList.contains('bookItem')) {
-			let this_id = event2.target.id.replace('book-', '');
+		if (event2.target.closest('.bookItem')) {
+			let this_id = event2.target.closest('.bookItem').id.replace('book-', '');
 			document.querySelector('#detailTitle').innerHTML = '<b>' + books[this_id]['title'] + '</b> (id: ' + books[this_id]['_id'] + ')';
 
 			fetch('/api/books/' + books[this_id]['_id'], {
@@ -160,13 +160,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	});
 
 	document.querySelector('#bookDetail').addEventListener('click', (event2) => {
-		if (event2.target.classList.contains('addComment')) {
+		if (event2.target.closest('.addComment')) {
 			event2.preventDefault();
 
-			let this_id = event2.target.dataset['i'];
+			let this_id = event2.target.closest('.addComment').dataset['i'];
 			let newComment = document.querySelector('#commentToAdd').value;
 
-			fetch('/api/books/' + event2.target.id, {
+			fetch('/api/books/' + event2.target.closest('.addComment').id, {
 				'method': 'POST',
 				'body': new URLSearchParams(new FormData(document.querySelector('#newCommentForm')))
 			})
@@ -210,13 +210,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			});
 		}
 
-		if (event2.target.classList.contains('deleteBook')) {
+		if (event2.target.closest('.deleteBook')) {
 			event2.preventDefault();
 
 			if (confirm('Are you sure you want to delete this book?')) {
-				let this_id = event2.target.dataset['i'];
+				let this_id = event2.target.closest('.deleteBook').dataset['i'];
 
-				fetch('/api/books/' + event2.target.id, {
+				fetch('/api/books/' + event2.target.closest('.deleteBook').id, {
 					'method': 'DELETE'
 				})
 				.then((response) => {
